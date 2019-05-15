@@ -34,13 +34,13 @@ for index, entry in enumerate(Corpus['TEXT']):
             Final_words.append(word_Final)
     Corpus.loc[index, 'text_final'] = str(Final_words)
 
-Train_X, Test_X, Train_Y, Test_Y = model_selection.train_test_split(Corpus['text_final'],Corpus['LABEL'], test_size=0.2)
+Train_X, Test_X, Train_Y, Test_Y = model_selection.train_test_split(Corpus['text_final'], Corpus['LABEL'], test_size=0.2)
 
 Encoder = LabelEncoder()
 Train_Y = Encoder.fit_transform(Train_Y)
 Test_Y = Encoder.fit_transform(Test_Y)
 
-Tfidf_vect = TfidfVectorizer(max_features=5000)
+Tfidf_vect = TfidfVectorizer(max_features=3000)
 Tfidf_vect.fit(Corpus['text_final'])
 Train_X_Tfidf = Tfidf_vect.transform(Train_X)
 Test_X_Tfidf = Tfidf_vect.transform(Test_X)
