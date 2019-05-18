@@ -5,7 +5,7 @@ from nltk import word_tokenize
 from nltk.corpus import stopwords
 df = pd.read_csv(r"C:\Users\ravialas\Desktop\corpus.csv", encoding='latin-1')
 df = df[['LABEL', 'TEXT']]
-df_filter = dict(df.groupby('LABEL').TEXT.count()>32)
+df_filter = dict(df.groupby('LABEL').TEXT.count()>49)
 df['Bool'] = df['LABEL'].map(df_filter)
 df = df[df['Bool'] == True]
 df['TEXT'] = [re.sub(r'[^A-Za-z0-9 ]+', ' ', w) for w in df['TEXT']]
@@ -18,7 +18,9 @@ category_id_df = df[['LABEL', 'category_id']].drop_duplicates().sort_values('cat
 category_to_id = dict(category_id_df.values)
 id_to_category = dict(category_id_df[['category_id', 'LABEL']].values)
 
-tfidf = TfidfVectorizer(sublinear_tf=True, max_df=1.0, norm='l2', encoding='latin-1', ngram_range=(1, 2), stop_words='english', max_features=4000)
+myStopWords = set(stopwords.words('english')) | set(stopwords.words('spanish')) | set(('hi','hello','hola','insurgentes','sur'))
+
+tfidf = TfidfVectorizer(sublinear_tf=True, max_df=1.0, norm='l2', encoding='latin-1', ngram_range=(1, 2), stop_words=myStopWords, max_features=4000)
 features = tfidf.fit_transform(df.TEXT).toarray()
 labels = df.category_id
 features.shape
